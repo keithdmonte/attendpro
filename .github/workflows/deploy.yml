@@ -25,13 +25,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
           cache-dependency-path: attendpro-frontend/package-lock.json
       
       - name: Install dependencies
         working-directory: ./attendpro-frontend
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
       
       - name: Build
         working-directory: ./attendpro-frontend

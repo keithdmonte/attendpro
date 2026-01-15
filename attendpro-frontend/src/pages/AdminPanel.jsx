@@ -637,7 +637,7 @@ function AdminPanel() {
             }}
           >
             <i className="bi bi-calendar-x me-1"></i>
-            End
+            End Semester
           </button>
         </div>
 

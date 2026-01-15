@@ -626,7 +626,7 @@ function AdminPanel() {
             <p className="text-muted mb-0 d-md-none" style={{fontSize: "0.9rem"}}>HOD - System Management</p>
           </div>
           <button
-            className="btn btn-duo-danger btn-lg w-100 w-md-auto"
+            className="btn btn-duo-danger btn-sm"
             onClick={() => {
               if (window.confirm("Are you absolutely sure you want to end the current semester? This action cannot be undone and will delete all current student, subject, attendance, and message data.")) {
                 setShowPasswordModal(true); // Show password modal first
@@ -636,9 +636,8 @@ function AdminPanel() {
               }
             }}
           >
-            <i className="bi bi-calendar-x me-2"></i>
-            <span className="d-none d-sm-inline">End Semester</span>
-            <span className="d-sm-none">End</span>
+            <i className="bi bi-calendar-x me-1"></i>
+            End
           </button>
         </div>
 

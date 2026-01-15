@@ -44,6 +44,7 @@ jobs:
         env:
           NODE_ENV: production
           VITE_BASE_PATH: /attendpro/  # Change this to match your repository name
+          VITE_API_URL: ${{ secrets.VITE_API_URL || 'http://127.0.0.1:8000' }}  # Backend API URL from GitHub Secrets
       
       - name: Setup Pages
         uses: actions/configure-pages@v4

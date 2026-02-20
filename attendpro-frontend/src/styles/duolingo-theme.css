@@ -377,10 +377,19 @@
     font-size: 0.95rem;
   }
 
+  .nav-tabs-duo {
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--duo-gray);
+  }
+
   .nav-tabs-duo .nav-link {
-    padding: 8px 12px;
+    padding: 10px 12px;
     font-size: 0.85rem;
     margin-right: 4px;
+    margin-bottom: 4px;
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: center;
   }
 
   .form-control-duo,
@@ -394,9 +403,13 @@
     flex-wrap: wrap;
   }
 
-  /* Responsive tables */
+  /* Responsive tables - use horizontal scroll instead of hiding columns */
   .table-responsive {
     font-size: 0.85rem;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    display: block;
+    width: 100%;
   }
 
   .table th,
@@ -404,11 +417,9 @@
     padding: 8px 4px;
     font-size: 0.8rem;
   }
-
-  /* Hide less important columns on mobile */
-  .table th:nth-child(n+4),
-  .table td:nth-child(n+4) {
-    display: none;
+  
+  .table {
+    min-width: 600px; /* Ensure table doesn't get too compressed */
   }
 
   /* Responsive grid adjustments */
@@ -853,5 +864,43 @@
   .container-fluid {
     padding-left: 12px;
     padding-right: 12px;
+  }
+
+  /* Make buttons full width on mobile in forms */
+  form .btn:not(.btn-sm):not(.btn-lg) {
+    width: 100%;
+  }
+
+  /* Improve card spacing on mobile */
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  /* Better spacing for form groups */
+  .form-label {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Additional responsive improvements for very small screens */
+@media (max-width: 400px) {
+  .btn-group {
+    flex-direction: column;
+  }
+
+  .btn-group .btn {
+    border-radius: 12px !important;
+    margin-bottom: 8px;
+  }
+
+  .btn-group .btn:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Compact table cells */
+  .table th,
+  .table td {
+    padding: 6px 4px;
+    font-size: 0.75rem;
   }
 }

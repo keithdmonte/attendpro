@@ -52,12 +52,12 @@ const Login = () => {
     <div className="page-background-duo">
       <div className="container container-duo">
         <div className="row justify-content-center">
-          <div className="col-md-6 col-lg-5">
-            <div className="card card-duo shadow-lg mt-5">
-              <div className="card-body p-5">
-                <div className="text-center mb-4">
-                  <h2 className="fw-bold mb-2 heading-duo">Welcome Back 👋</h2>
-                  <p className="text-muted">Sign in to your account</p>
+          <div className="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <div className="card card-duo shadow-lg mt-3 mt-md-5">
+              <div className="card-body p-3 p-md-4 p-lg-5">
+                <div className="text-center mb-3 mb-md-4">
+                  <h2 className="fw-bold mb-2 heading-duo" style={{fontSize: "clamp(1.5rem, 4vw, 2rem)"}}>Welcome Back 👋</h2>
+                  <p className="text-muted small">Sign in to your account</p>
                 </div>
 
                 {/* User Type Selection */}

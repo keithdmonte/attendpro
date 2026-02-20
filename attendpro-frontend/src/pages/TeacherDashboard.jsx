@@ -407,8 +407,8 @@ const TeacherDashboard = () => {
       <div className="container container-duo">
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
           <div>
-            <h2 className="mb-1 heading-duo" style={{fontSize: "2.5rem"}}>📚 Teacher Dashboard</h2>
-            <p className="text-muted mb-0 d-none d-md-block" style={{fontSize: "1.1rem"}}>Welcome back, {teacherName}!</p>
+            <h2 className="mb-1 heading-duo" style={{fontSize: "clamp(1.75rem, 4vw, 2.5rem)"}}>📚 Teacher Dashboard</h2>
+            <p className="text-muted mb-0 d-none d-md-block" style={{fontSize: "clamp(0.95rem, 1.5vw, 1.1rem)"}}>Welcome back, {teacherName}!</p>
             <p className="text-muted mb-0 d-md-none" style={{fontSize: "0.9rem"}}>Welcome, {teacherName}!</p>
           </div>
         <div className="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
@@ -478,33 +478,33 @@ const TeacherDashboard = () => {
               <i className="bi bi-check-circle me-2"></i>
               ✅ Attendance Saved Successfully!
             </h5>
-            <div className="row mb-2">
-              <div className="col-md-3">
-                <strong>Subject:</strong> {submittedAttendance.subjectName}
+            <div className="row g-2 mb-2">
+              <div className="col-6 col-sm-6 col-md-3">
+                <strong>Subject:</strong> <span className="d-block d-md-inline">{submittedAttendance.subjectName}</span>
               </div>
-              <div className="col-md-3">
-                <strong>Class:</strong> {submittedAttendance.class}
+              <div className="col-6 col-sm-6 col-md-3">
+                <strong>Class:</strong> <span className="d-block d-md-inline">{submittedAttendance.class}</span>
               </div>
-              <div className="col-md-3">
-                <strong>Date:</strong> {submittedAttendance.date}
+              <div className="col-6 col-sm-6 col-md-3">
+                <strong>Date:</strong> <span className="d-block d-md-inline">{submittedAttendance.date}</span>
               </div>
-              <div className="col-md-3">
-                <strong>Time:</strong> {submittedAttendance.time} ({submittedAttendance.lectureType})
+              <div className="col-6 col-sm-6 col-md-3">
+                <strong>Time:</strong> <span className="d-block d-md-inline">{submittedAttendance.time} ({submittedAttendance.lectureType})</span>
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-3">
-                <strong>Total:</strong> {submittedAttendance.total}
+            <div className="row g-2">
+              <div className="col-6 col-sm-6 col-md-3">
+                <strong>Total:</strong> <span className="d-block d-md-inline">{submittedAttendance.total}</span>
               </div>
-              <div className="col-md-3">
+              <div className="col-6 col-sm-6 col-md-3">
                 <strong>Present:</strong>{" "}
                 <span className="badge badge-duo-success">{submittedAttendance.present}</span>
               </div>
-              <div className="col-md-3">
+              <div className="col-6 col-sm-6 col-md-3">
                 <strong>Absent:</strong>{" "}
                 <span className="badge badge-duo-danger">{submittedAttendance.absent}</span>
               </div>
-              <div className="col-md-3">
+              <div className="col-6 col-sm-6 col-md-3">
                 <strong>Attendance %:</strong>{" "}
                 <span
                   className={`badge ${

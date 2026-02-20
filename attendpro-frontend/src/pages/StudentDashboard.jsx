@@ -353,10 +353,10 @@ const StudentDashboard = () => {
     <div className="page-background-duo">
       <div className="container container-duo">
         {/* Header with Logout */}
-        <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="mb-0 heading-duo" style={{fontSize: "2.5rem"}}>👨‍🎓 Student Dashboard</h2>
+        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3 gap-2">
+        <h2 className="mb-0 heading-duo" style={{fontSize: "clamp(1.75rem, 4vw, 2.5rem)"}}>👨‍🎓 Student Dashboard</h2>
         <button
-          className="btn btn-outline-secondary"
+          className="btn btn-outline-secondary w-100 w-sm-auto"
           onClick={() => {
             localStorage.removeItem("studentId");
             localStorage.removeItem("studentName");
@@ -550,7 +550,7 @@ const StudentDashboard = () => {
             <div className="card-body text-center py-4">
               <h6 className="text-muted mb-3">Overall Attendance</h6>
               <div className="display-4 mb-2">
-                <span className={`badge ${badgeClass}`} style={{ fontSize: "3rem", padding: "1rem 2rem" }}>
+                <span className={`badge ${badgeClass}`} style={{ fontSize: "clamp(1.5rem, 5vw, 3rem)", padding: "clamp(0.5rem, 2vw, 1rem) clamp(1rem, 3vw, 2rem)" }}>
                   {attendancePercentage}%
                 </span>
               </div>

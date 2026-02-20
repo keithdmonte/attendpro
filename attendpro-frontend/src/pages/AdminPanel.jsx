@@ -651,12 +651,12 @@ function AdminPanel() {
       <div className="container container-duo">
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
           <div>
-            <h2 className="mb-1 heading-duo" style={{fontSize: "2.5rem"}}>⚙️ Admin Panel</h2>
-            <p className="text-muted mb-0 d-none d-md-block" style={{fontSize: "1.1rem"}}>Head of Department - Complete System Management</p>
+            <h2 className="mb-1 heading-duo" style={{fontSize: "clamp(1.75rem, 4vw, 2.5rem)"}}>⚙️ Admin Panel</h2>
+            <p className="text-muted mb-0 d-none d-md-block" style={{fontSize: "clamp(0.95rem, 1.5vw, 1.1rem)"}}>Head of Department - Complete System Management</p>
             <p className="text-muted mb-0 d-md-none" style={{fontSize: "0.9rem"}}>HOD - System Management</p>
           </div>
           <button
-            className="btn btn-duo-danger btn-sm"
+            className="btn btn-duo-danger btn-sm w-100 w-md-auto"
             onClick={() => {
               if (window.confirm("Are you absolutely sure you want to end the current semester? This action cannot be undone and will delete all current student, subject, attendance, and message data.")) {
                 setShowPasswordModal(true); // Show password modal first
@@ -767,8 +767,8 @@ function AdminPanel() {
             {showStudentForm && (
               <div className="card-body border-bottom">
                 <form onSubmit={handleCreateStudent}>
-                  <div className="row">
-                    <div className="col-md-3">
+                  <div className="row g-2 g-md-3">
+                    <div className="col-12 col-sm-6 col-md-3">
                       <label className="form-label">Roll Number</label>
                       <input
                         type="text"
@@ -780,7 +780,7 @@ function AdminPanel() {
                         required
                       />
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-12 col-sm-6 col-md-3">
                       <label className="form-label">Name</label>
                       <input
                         type="text"
@@ -792,7 +792,7 @@ function AdminPanel() {
                         required
                       />
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-12 col-sm-6 col-md-3">
                       <label className="form-label">Email</label>
                       <input
                         type="email"
@@ -804,7 +804,7 @@ function AdminPanel() {
                         required
                       />
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-12 col-sm-6 col-md-3">
                       <label className="form-label">Class</label>
         <select
           className="form-select form-select-duo"
@@ -818,11 +818,11 @@ function AdminPanel() {
                         {CLASSES.map((cls) => (
                           <option key={cls} value={cls}>
                             {cls}
-            </option>
-          ))}
+                          </option>
+                        ))}
         </select>
-      </div>
-          </div>
+                    </div>
+                  </div>
                   <button type="submit" className="btn btn-duo-success mt-3">
                     Create Student
                   </button>
@@ -890,8 +890,8 @@ function AdminPanel() {
             {showSubjectForm && (
               <div className="card-body border-bottom">
                 <form onSubmit={handleCreateSubject}>
-                  <div className="row">
-                    <div className="col-md-3">
+                  <div className="row g-2 g-md-3">
+                    <div className="col-12 col-sm-6 col-md-3">
                       <label className="form-label">Subject Name</label>
                       <input
                         type="text"
@@ -903,7 +903,7 @@ function AdminPanel() {
                         required
                       />
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-12 col-sm-6 col-md-3">
                       <label className="form-label">Subject Code</label>
                       <input
                         type="text"
@@ -915,7 +915,7 @@ function AdminPanel() {
                         required
                       />
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-12 col-sm-6 col-md-3">
                       <label className="form-label">Class</label>
                       <select
                         className="form-select form-select-duo"
@@ -933,7 +933,7 @@ function AdminPanel() {
                         ))}
                       </select>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-12 col-sm-6 col-md-3">
                       <label className="form-label">Teacher</label>
                       <select
                         className="form-select form-select-duo"
@@ -952,7 +952,7 @@ function AdminPanel() {
                       </select>
                     </div>
                   </div>
-                  <button type="submit" className="btn btn-duo-success mt-3">
+                  <button type="submit" className="btn btn-duo-success mt-3 w-100 w-md-auto">
                     Create Subject
                   </button>
                 </form>
@@ -1019,8 +1019,8 @@ function AdminPanel() {
             {showTeacherForm && (
               <div className="card-body border-bottom">
                 <form onSubmit={handleCreateTeacher}>
-                  <div className="row">
-                    <div className="col-md-4">
+                  <div className="row g-2 g-md-3">
+                    <div className="col-12 col-sm-6 col-md-4">
                       <label className="form-label">Name</label>
                       <input
                         type="text"
@@ -1032,7 +1032,7 @@ function AdminPanel() {
                         required
                       />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-12 col-sm-6 col-md-4">
                       <label className="form-label">Email</label>
                       <input
                         type="email"
@@ -1044,7 +1044,7 @@ function AdminPanel() {
                         required
                       />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-12 col-sm-6 col-md-4">
                       <label className="form-label">Department (Optional)</label>
                       <input
                         type="text"
@@ -1056,7 +1056,7 @@ function AdminPanel() {
                       />
                     </div>
                   </div>
-                  <button type="submit" className="btn btn-duo-success mt-3">
+                  <button type="submit" className="btn btn-duo-success mt-3 w-100 w-md-auto">
                     Create Teacher
                   </button>
                 </form>
@@ -1274,8 +1274,8 @@ function AdminPanel() {
                 <h5 className="mb-0">Filters</h5>
               </div>
               <div className="card-body">
-                <div className="row">
-                  <div className="col-md-4">
+                <div className="row g-2 g-md-3">
+                  <div className="col-12 col-sm-6 col-md-4">
                     <label className="form-label fw-semibold">Filter by Subject:</label>
                     <select
                       className="form-select form-select-duo"
@@ -1292,7 +1292,7 @@ function AdminPanel() {
                         ))}
                     </select>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-12 col-sm-6 col-md-4">
                     <label className="form-label fw-semibold">Filter by Date:</label>
                     <input
                       type="date"
@@ -1302,14 +1302,14 @@ function AdminPanel() {
                     />
                     {filterByDate && (
                       <button
-                        className="btn btn-sm btn-outline-secondary mt-2"
+                        className="btn btn-sm btn-outline-secondary mt-2 w-100 w-sm-auto"
                         onClick={() => setFilterByDate("")}
                       >
                         Clear Date Filter
                       </button>
                     )}
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-12 col-sm-6 col-md-4">
                     <label className="form-label fw-semibold">Filter by Student:</label>
                     <select
                       className="form-select form-select-duo"

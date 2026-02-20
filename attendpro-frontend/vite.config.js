@@ -10,6 +10,11 @@ export default defineConfig({
   base: process.env.NODE_ENV === 'production' 
     ? (process.env.VITE_BASE_PATH || '/attendpro/') 
     : '/',
+  server: {
+    host: '127.0.0.1',
+    port: 5173,
+    strictPort: false, // If port is in use, try next available
+  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',

@@ -49,104 +49,106 @@ const Login = () => {
   };
 
   return (
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-5">
-          <div className="card shadow-lg border-0 mt-5">
-            <div className="card-body p-5">
-              <div className="text-center mb-4">
-                <h2 className="fw-bold mb-2">Welcome Back</h2>
-                <p className="text-muted">Sign in to your account</p>
-              </div>
-
-              {/* User Type Selection */}
-              <div className="mb-4">
-                <label className="form-label fw-semibold">I am a:</label>
-                <div className="btn-group w-100" role="group">
-                  <input
-                    type="radio"
-                    className="btn-check"
-                    name="userType"
-                    id="student"
-                    value="student"
-                    checked={userType === "student"}
-                    onChange={(e) => setUserType(e.target.value)}
-                  />
-                  <label className="btn btn-outline-primary" htmlFor="student">
-                    👨‍🎓 Student
-                  </label>
-
-                  <input
-                    type="radio"
-                    className="btn-check"
-                    name="userType"
-                    id="teacher"
-                    value="teacher"
-                    checked={userType === "teacher"}
-                    onChange={(e) => setUserType(e.target.value)}
-                  />
-                  <label className="btn btn-outline-primary" htmlFor="teacher">
-                    👨‍🏫 Teacher
-                  </label>
+    <div className="page-background-duo">
+      <div className="container container-duo">
+        <div className="row justify-content-center">
+          <div className="col-md-6 col-lg-5">
+            <div className="card card-duo shadow-lg mt-5">
+              <div className="card-body p-5">
+                <div className="text-center mb-4">
+                  <h2 className="fw-bold mb-2 heading-duo">Welcome Back 👋</h2>
+                  <p className="text-muted">Sign in to your account</p>
                 </div>
-              </div>
 
-      <form onSubmit={handleLogin}>
+                {/* User Type Selection */}
                 <div className="mb-4">
-                  <label htmlFor="email" className="form-label fw-semibold">
-                    Email Address
-                  </label>
-          <input
-            type="email"
-                    id="email"
-                    className="form-control form-control-lg"
-                    placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-                    disabled={loading}
-          />
-        </div>
+                  <label className="form-label fw-semibold">I am a:</label>
+                  <div className="btn-group w-100" role="group">
+                    <input
+                      type="radio"
+                      className="btn-check"
+                      name="userType"
+                      id="student"
+                      value="student"
+                      checked={userType === "student"}
+                      onChange={(e) => setUserType(e.target.value)}
+                    />
+                    <label className={`btn ${userType === "student" ? "btn-duo-primary" : "btn-outline-primary"}`} htmlFor="student">
+                      👨‍🎓 Student
+                    </label>
 
-                {error && (
-                  <div
-                    className="alert alert-danger alert-dismissible fade show"
-                    role="alert"
-                  >
-                    {error}
-                    <button
-                      type="button"
-                      className="btn-close"
-                      onClick={() => setError("")}
-                      aria-label="Close"
-                    ></button>
+                    <input
+                      type="radio"
+                      className="btn-check"
+                      name="userType"
+                      id="teacher"
+                      value="teacher"
+                      checked={userType === "teacher"}
+                      onChange={(e) => setUserType(e.target.value)}
+                    />
+                    <label className={`btn ${userType === "teacher" ? "btn-duo-success" : "btn-outline-success"}`} htmlFor="teacher">
+                      👨‍🏫 Teacher
+                    </label>
                   </div>
-                )}
+                </div>
 
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-lg w-100 mb-3"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <span
-                        className="spinner-border spinner-border-sm me-2"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Signing in...
-                    </>
-                  ) : (
-                    "Sign In"
+                <form onSubmit={handleLogin}>
+                  <div className="mb-4">
+                    <label htmlFor="email" className="form-label fw-semibold">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="form-control form-control-duo form-control-lg"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={loading}
+                    />
+                  </div>
+
+                  {error && (
+                    <div
+                      className="alert alert-duo-danger alert-dismissible fade show"
+                      role="alert"
+                    >
+                      {error}
+                      <button
+                        type="button"
+                        className="btn-close"
+                        onClick={() => setError("")}
+                        aria-label="Close"
+                      ></button>
+                    </div>
                   )}
-        </button>
-      </form>
 
-              <div className="text-center mt-4">
-                <small className="text-muted">
-                  Demo: Use any {userType} email from the database
-                </small>
+                  <button
+                    type="submit"
+                    className={`btn btn-duo-primary btn-lg w-100 mb-3`}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Signing in...
+                      </>
+                    ) : (
+                      "Sign In"
+                    )}
+                  </button>
+                </form>
+
+                <div className="text-center mt-4">
+                  <small className="text-muted">
+                    Demo: Use any {userType} email from the database
+                  </small>
+                </div>
               </div>
             </div>
           </div>

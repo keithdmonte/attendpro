@@ -4,6 +4,7 @@ import Login from "./pages/Login";   // ⬅ import Login page
 import StudentDashboard from "./pages/StudentDashboard";  
 import TeacherDashboard from "./pages/TeacherDashboard"; 
 import AdminPanel from "./pages/AdminPanel";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -39,7 +40,7 @@ function App() {
                                 View your attendance records and track your
                                 performance
                               </p>
-                              <a href="/student" className="btn btn-duo-primary">
+                              <a href="/login" className="btn btn-duo-primary">
                                 Access Portal
                               </a>
                             </div>
@@ -55,7 +56,7 @@ function App() {
                               <p className="card-text text-muted">
                                 Mark attendance and manage your classes
                               </p>
-                              <a href="/teacher" className="btn btn-duo-success">
+                              <a href="/login" className="btn btn-duo-success">
                                 Access Portal
                               </a>
                             </div>
@@ -71,7 +72,7 @@ function App() {
                               <p className="card-text text-muted">
                                 Manage students, teachers, and system settings
                               </p>
-                              <a href="/admin" className="btn btn-duo-secondary">
+                              <a href="/login" className="btn btn-duo-secondary">
                                 Access Panel
                               </a>
                             </div>
@@ -85,9 +86,30 @@ function App() {
             }
           />
           <Route path="/login" element={<Login />} />
-          <Route path="/student" element={<StudentDashboard />} />   
-          <Route path="/teacher" element={<TeacherDashboard />} />
-          <Route path="/admin" element={<AdminPanel />} /> 
+          <Route 
+            path="/student" 
+            element={
+              <ProtectedRoute userType="student">
+                <StudentDashboard />
+              </ProtectedRoute>
+            } 
+          />   
+          <Route 
+            path="/teacher" 
+            element={
+              <ProtectedRoute userType="teacher">
+                <TeacherDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute userType="admin">
+                <AdminPanel />
+              </ProtectedRoute>
+            } 
+          /> 
         </Routes>
       </div>
     </>

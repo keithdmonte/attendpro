@@ -1,8 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-# Import models (SQLAlchemy)
-from backend import models
+# Models are imported by routers when needed - no need to import here for faster startup
 
 # Import routers
 from backend.app.api.routers.students import router as students_router
@@ -15,10 +14,18 @@ from backend.app.api.routers.semester import router as semester_router
 # Create app
 app = FastAPI(title="AttendPro API")
 
-# Enable CORS
+# Allowed origins
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5174",
+]
+
+# Use FastAPI's built-in CORS middleware (faster and more reliable)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -33,5 +40,9 @@ app.include_router(messages_router, prefix="/messages", tags=["Messages"])
 app.include_router(semester_router, prefix="/semester", tags=["Semester"])
 
 @app.get("/")
-def root():
-    return {"message": "AttendPro backend is running"}
+def root(request: Request):
+    # Test endpoint to check CORS headers
+    return {
+        "message": "AttendPro backend is running",
+        "origin": request.headers.get("origin", "none")
+    }

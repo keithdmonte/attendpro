@@ -20,12 +20,18 @@ const StudentDashboard = () => {
   const [activeTab, setActiveTab] = useState("home"); // "home", "absent-history", "by-subject", "messages"
 
   // ✅ Get studentId from localStorage (set during login)
-  const studentId = parseInt(localStorage.getItem("studentId") || "1", 10);
+  const studentId = parseInt(localStorage.getItem("studentId") || "0", 10);
   const studentName = localStorage.getItem("studentName") || "Student";
 
   // ✅ Fetch subjects, teachers, attendance, and messages
   useEffect(() => {
     const fetchData = async () => {
+      if (!studentId || studentId === 0) {
+        setError("Please login to access your dashboard");
+        setLoading(false);
+        return;
+      }
+      
       try {
         setLoading(true);
         setError(null);

@@ -77,7 +77,22 @@ function AdminPanel() {
       } catch (error) {
         console.error("Error fetching data:", error);
         console.error("Error details:", error.response?.data || error.message);
-        setError(`Failed to load data: ${error.response?.data?.detail || error.message}. Please refresh the page.`);
+        console.error("Error request:", error.request);
+        console.error("Error config:", error.config);
+        
+        let errorMessage = "Failed to load data: ";
+        if (error.response) {
+          // Server responded with error status
+          errorMessage += error.response.data?.detail || error.response.data?.message || `HTTP ${error.response.status}`;
+        } else if (error.request) {
+          // Request was made but no response received (Network Error)
+          errorMessage += "Network Error - Cannot connect to backend server. Please ensure the backend is running at http://127.0.0.1:8000";
+        } else {
+          // Something else happened
+          errorMessage += error.message || "Unknown error";
+        }
+        errorMessage += ". Please refresh the page.";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -305,7 +320,22 @@ function AdminPanel() {
       setStudentForm({ roll_no: "", name: "", email: "", class_name: "" });
       alert("✅ Student created successfully!");
     } catch (error) {
-      alert("❌ Error creating student: " + (error.response?.data?.detail || error.message));
+      console.error("Error creating student:", error);
+      console.error("Error response:", error.response);
+      console.error("Error config:", error.config);
+      
+      let errorMessage = "❌ Error creating student: ";
+      if (error.response) {
+        // Server responded with error
+        errorMessage += error.response.data?.detail || error.response.data?.message || `HTTP ${error.response.status}`;
+      } else if (error.request) {
+        // Request made but no response (network error)
+        errorMessage += "Network Error - Backend server may not be running or CORS issue. Check console for details.";
+      } else {
+        // Something else happened
+        errorMessage += error.message || "Unknown error";
+      }
+      alert(errorMessage);
     }
   };
 

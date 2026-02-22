@@ -20,6 +20,7 @@ ALLOWED_ORIGINS = [
     "http://localhost:5174",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
+    "https://keithdmonte.github.io",  # GitHub Pages deployment
 ]
 
 # Use FastAPI's built-in CORS middleware (faster and more reliable)

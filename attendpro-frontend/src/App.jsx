@@ -30,51 +30,57 @@ function App() {
                       </div>
                       <div className="row g-3 g-md-4 mt-3 mt-md-4">
                         <div className="col-12 col-sm-6 col-md-4">
-                          <div className="card card-duo h-100">
-                            <div className="card-body text-center">
+                          <div className="card card-duo h-100 d-flex flex-column">
+                            <div className="card-body text-center d-flex flex-column flex-grow-1">
                               <div className="mb-2 mb-md-3">
                                 <span style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}>👨‍🎓</span>
                               </div>
                               <h5 className="card-title">Student Portal</h5>
-                              <p className="card-text text-muted small">
+                              <p className="card-text text-muted small flex-grow-1">
                                 View your attendance records and track your
                                 performance
                               </p>
-                              <a href="/login" className="btn btn-duo-primary w-100 w-sm-auto">
-                                Access Portal
-                              </a>
+                              <div className="mt-auto pt-3">
+                                <a href="/login" className="btn btn-duo-primary w-100" style={{minWidth: "140px", padding: "12px 24px", fontSize: "1rem"}}>
+                                  Access Portal
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </div>
                         <div className="col-12 col-sm-6 col-md-4">
-                          <div className="card card-duo h-100">
-                            <div className="card-body text-center">
+                          <div className="card card-duo h-100 d-flex flex-column">
+                            <div className="card-body text-center d-flex flex-column flex-grow-1">
                               <div className="mb-2 mb-md-3">
                                 <span style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}>👨‍🏫</span>
                               </div>
-                              <h5 className="card-title">Teacher Portal</h5>
-                              <p className="card-text text-muted small">
+                              <h5 className="card-title">Faculty Portal</h5>
+                              <p className="card-text text-muted small flex-grow-1">
                                 Mark attendance and manage your classes
                               </p>
-                              <a href="/login" className="btn btn-duo-success w-100 w-sm-auto">
-                                Access Portal
-                              </a>
+                              <div className="mt-auto pt-3">
+                                <a href="/login" className="btn btn-duo-success w-100" style={{minWidth: "140px", padding: "12px 24px", fontSize: "1rem", borderRadius: "16px"}}>
+                                  Access Portal
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </div>
                         <div className="col-12 col-sm-6 col-md-4">
-                          <div className="card card-duo h-100">
-                            <div className="card-body text-center">
+                          <div className="card card-duo h-100 d-flex flex-column">
+                            <div className="card-body text-center d-flex flex-column flex-grow-1">
                               <div className="mb-2 mb-md-3">
                                 <span style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}>⚙️</span>
                               </div>
                               <h5 className="card-title">Admin Panel</h5>
-                              <p className="card-text text-muted small">
+                              <p className="card-text text-muted small flex-grow-1">
                                 Manage students, teachers, and system settings
                               </p>
-                              <a href="/login" className="btn btn-duo-secondary w-100 w-sm-auto">
-                                Access Panel
-                              </a>
+                              <div className="mt-auto pt-3">
+                                <a href="/login" className="btn btn-duo-secondary w-100" style={{minWidth: "140px", padding: "12px 24px", fontSize: "1rem"}}>
+                                  Access Panel
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </div>

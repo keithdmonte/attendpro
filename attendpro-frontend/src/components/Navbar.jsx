@@ -53,7 +53,7 @@ function Navbar() {
                 className={`nav-link ${isActive("/teacher") ? "active" : ""}`}
                 to="/teacher"
               >
-                Teacher Portal
+                Faculty Portal
               </Link>
             </li>
             <li className="nav-item">

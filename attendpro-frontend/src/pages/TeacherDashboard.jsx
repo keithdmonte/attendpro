@@ -24,7 +24,7 @@ const TeacherDashboard = () => {
   const [time, setTime] = useState("09:00");
   
   // View mode states
-  const [viewMode, setViewMode] = useState("mark"); // "mark" or "view"
+  const [viewMode, setViewMode] = useState("mark"); // "mark", "view", or "records"
   const [viewSubjectId, setViewSubjectId] = useState("");
   const [viewClass, setViewClass] = useState("");
   const [viewStudentId, setViewStudentId] = useState("");
@@ -308,6 +308,79 @@ const TeacherDashboard = () => {
     }
   };
 
+  // ✅ Calculate attendance percentage for a specific student
+  const getStudentAttendancePercentage = () => {
+    if (!viewStudentId || !viewAttendance || viewAttendance.length === 0) {
+      return null;
+    }
+
+    const studentRecords = viewAttendance.filter(a => a.student_id === parseInt(viewStudentId, 10));
+    if (studentRecords.length === 0) {
+      return null;
+    }
+
+    const totalLectures = studentRecords.length;
+    const presentCount = studentRecords.filter(a => a.status === "present").length;
+    const percentage = totalLectures > 0 
+      ? ((presentCount / totalLectures) * 100).toFixed(1)
+      : 0;
+
+    return {
+      percentage: parseFloat(percentage),
+      totalLectures,
+      presentCount,
+      absentCount: totalLectures - presentCount
+    };
+  };
+
+  // ✅ Group attendance by student (for individual student percentages)
+  const getAttendanceByStudent = () => {
+    if (!viewAttendance || !Array.isArray(viewAttendance) || viewAttendance.length === 0) {
+      return {};
+    }
+
+    const grouped = {};
+    
+    try {
+      viewAttendance.forEach(record => {
+        if (!record || !record.student_id) return;
+        
+        const studentId = record.student_id;
+        
+        if (!grouped[studentId]) {
+          grouped[studentId] = {
+            records: [],
+            totalLectures: 0,
+            presentCount: 0,
+            absentCount: 0,
+          };
+        }
+        
+        grouped[studentId].records.push(record);
+        grouped[studentId].totalLectures++;
+        
+        if (record.status === "present") {
+          grouped[studentId].presentCount++;
+        } else if (record.status === "absent") {
+          grouped[studentId].absentCount++;
+        }
+      });
+
+      // Calculate percentages for each student
+      Object.keys(grouped).forEach(studentId => {
+        const stats = grouped[studentId];
+        stats.attendancePercentage = stats.totalLectures > 0
+          ? ((stats.presentCount / stats.totalLectures) * 100).toFixed(1)
+          : 0;
+      });
+    } catch (error) {
+      console.error("Error grouping attendance by student:", error);
+      return {};
+    }
+
+    return grouped;
+  };
+
   // ✅ Group attendance by class
   const getAttendanceByClass = () => {
     if (!viewAttendance || !Array.isArray(viewAttendance) || viewAttendance.length === 0) {
@@ -361,10 +434,10 @@ const TeacherDashboard = () => {
   };
 
   useEffect(() => {
-    if (viewMode === "view" && viewSubjectId) {
+    if ((viewMode === "view" || viewMode === "records") && viewSubjectId) {
       handleViewAttendance();
     }
-  }, [viewSubjectId, viewClass, viewStudentId]);
+  }, [viewSubjectId, viewClass, viewStudentId, viewMode]);
 
   if (!teacherId) {
     return (
@@ -448,10 +521,18 @@ const TeacherDashboard = () => {
         </li>
         <li className="nav-item">
           <button
-            className={`nav-link ${viewMode === "mark" ? "" : "active"}`}
+            className={`nav-link ${viewMode === "view" ? "active" : ""}`}
             onClick={() => setViewMode("view")}
           >
-            📊 View Attendance
+            Attendance records
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            className={`nav-link ${viewMode === "records" ? "active" : ""}`}
+            onClick={() => setViewMode("records")}
+          >
+            View attendance
           </button>
         </li>
       </ul>
@@ -969,8 +1050,61 @@ const TeacherDashboard = () => {
               <i className="bi bi-exclamation-triangle me-2"></i>
               <strong>Error:</strong> {error}
             </div>
-          ) : viewAttendance && viewAttendance.length > 0 ? (
+              ) : viewAttendance && viewAttendance.length > 0 ? (
             <>
+              {/* Student Attendance Percentage Card - Show when viewing specific student */}
+              {viewStudentId && (() => {
+                const studentStats = getStudentAttendancePercentage();
+                const selectedStudent = allStudents.find(s => s.id === parseInt(viewStudentId, 10));
+                return studentStats ? (
+                  <div className="card card-duo mb-4 border-primary">
+                    <div className="card-body">
+                      <div className="row align-items-center">
+                        <div className="col-12 col-md-6">
+                          <h5 className="mb-2">
+                            <i className="bi bi-person-circle me-2"></i>
+                            {selectedStudent?.name || "Student"} ({selectedStudent?.roll_no || "N/A"})
+                          </h5>
+                          <p className="text-muted mb-0">
+                            {subjects.find(s => s.id === parseInt(viewSubjectId))?.name || "Subject"} - Attendance Summary
+                          </p>
+                        </div>
+                        <div className="col-12 col-md-6 text-center text-md-end">
+                          <div className="d-inline-block">
+                            <div className="mb-2">
+                              <small className="text-muted d-block">Overall Attendance</small>
+                              <span
+                                className={`badge ${
+                                  studentStats.percentage >= 75
+                                    ? "bg-success"
+                                    : studentStats.percentage >= 50
+                                    ? "bg-warning text-dark"
+                                    : "bg-danger"
+                                }`}
+                                style={{ fontSize: "2rem", padding: "0.75rem 1.5rem", fontWeight: "bold" }}
+                              >
+                                {studentStats.percentage}%
+                              </span>
+                            </div>
+                            <div className="d-flex justify-content-center justify-content-md-end gap-3 mt-2">
+                              <small className="text-muted">
+                                <span className="badge bg-success me-1">{studentStats.presentCount}</span> Present
+                              </small>
+                              <small className="text-muted">
+                                <span className="badge bg-danger me-1">{studentStats.absentCount}</span> Absent
+                              </small>
+                              <small className="text-muted">
+                                <span className="badge bg-secondary me-1">{studentStats.totalLectures}</span> Total
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : null;
+              })()}
+
               {/* Class-wise Summary Cards - Show when viewing all classes */}
               {!viewClass && !viewStudentId && (
                 <div className="row mb-4">
@@ -1053,13 +1187,12 @@ const TeacherDashboard = () => {
                         <table className="table table-hover table-sm">
                           <thead className="table-light">
                             <tr>
-                              <th>Date</th>
-                              <th>Time</th>
-                              <th>Lecture Type</th>
-                              <th>Student Name</th>
-                              <th>Roll No</th>
-                              <th>Status</th>
-                              <th>Remarks</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Lecture Type</th>
+                            <th>Student Name</th>
+                            <th>Roll No</th>
+                            <th>Status</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1097,7 +1230,6 @@ const TeacherDashboard = () => {
                                       {a.status.toUpperCase()}
                                     </span>
                                   </td>
-                                  <td>{a.remarks || "-"}</td>
                                 </tr>
                               );
                             })}
@@ -1109,19 +1241,20 @@ const TeacherDashboard = () => {
                 ))
               ) : (
                 // Show single filtered view when class or student is selected
-                <div className="card card-duo">
-                  <div className="card-header bg-white">
-                    <h5 className="mb-0">
-                      Attendance Records
-                      {viewClass && <span className="badge badge-duo-info ms-2">{viewClass}</span>}
-                      {viewStudentId && (
-                        <span className="badge badge-duo-info ms-2">
-                          {allStudents.find(s => s.id === parseInt(viewStudentId))?.name || "Student"}
-                        </span>
-                      )}
-                    </h5>
-                  </div>
-                  <div className="card-body">
+                <>
+                  <div className="card card-duo">
+                    <div className="card-header bg-white">
+                      <h5 className="mb-0">
+                        Attendance Records
+                        {viewClass && <span className="badge badge-duo-info ms-2">{viewClass}</span>}
+                        {viewStudentId && (
+                          <span className="badge badge-duo-info ms-2">
+                            {allStudents.find(s => s.id === parseInt(viewStudentId))?.name || "Student"}
+                          </span>
+                        )}
+                      </h5>
+                    </div>
+                    <div className="card-body">
                     <div className="table-responsive">
                       <table className="table table-hover">
                         <thead className="table-light">
@@ -1133,7 +1266,6 @@ const TeacherDashboard = () => {
                             <th>Roll No</th>
                             <th>Class</th>
                             <th>Status</th>
-                            <th>Remarks</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1164,19 +1296,18 @@ const TeacherDashboard = () => {
                                   </span>
                                 </td>
                                 <td>
-            <span
-              className={`badge ${
+                                  <span
+                                    className={`badge ${
                                       a.status === "present"
                                         ? "bg-success"
                                         : a.status === "absent"
-                  ? "bg-danger"
+                                        ? "bg-danger"
                                         : "bg-warning"
-              }`}
-            >
+                                    }`}
+                                  >
                                     {a.status.toUpperCase()}
-            </span>
+                                  </span>
                                 </td>
-                                <td>{a.remarks || "-"}</td>
                               </tr>
                             );
                           })}
@@ -1185,12 +1316,184 @@ const TeacherDashboard = () => {
                     </div>
                   </div>
                 </div>
+                </>
               )}
             </>
           ) : viewSubjectId ? (
             <div className="alert alert-info text-center">
               <i className="bi bi-info-circle me-2"></i>
               No attendance records found for the selected filters.
+            </div>
+          ) : null}
+        </div>
+      )}
+
+      {/* VIEW ATTENDANCE RECORDS MODE */}
+      {viewMode === "records" && (
+        <div>
+          <div className="card card-duo mb-4">
+            <div className="card-header bg-white">
+              <h5 className="mb-0">View Attendance</h5>
+            </div>
+            <div className="card-body">
+              <div className="row g-3">
+                <div className="col-12 col-md-6">
+                  <label className="form-label">Select Subject</label>
+                  <select
+                    className="form-select"
+                    value={viewSubjectId}
+                    onChange={(e) => {
+                      setViewSubjectId(e.target.value);
+                      setViewClass("");
+                      setViewStudentId("");
+                    }}
+                  >
+                    <option value="">-- Select Subject --</option>
+                    {subjects.map((subject) => (
+                      <option key={subject.id} value={subject.id}>
+                        {subject.name} ({subject.code})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {viewSubjectId && (
+                  <div className="col-12 col-md-6">
+                    <label className="form-label">Select Class</label>
+                    <select
+                      className="form-select"
+                      value={viewClass}
+                      onChange={(e) => {
+                        setViewClass(e.target.value);
+                        setViewStudentId("");
+                        if (e.target.value) {
+                          handleViewAttendance();
+                        }
+                      }}
+                    >
+                      <option value="">-- Select Class --</option>
+                      {[...new Set(allStudents.map((s) => s.class_name))].map(
+                        (className) => (
+                          <option key={className} value={className}>
+                            {className}
+                          </option>
+                        )
+                      )}
+                    </select>
+                  </div>
+                )}
+              </div>
+              {viewSubjectId && viewClass && (
+                <div className="mt-3">
+                  <button
+                    className="btn btn-duo-primary"
+                    onClick={handleViewAttendance}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-search me-2"></i>View Records
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="text-center py-5">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <p className="mt-2 text-muted">Loading attendance data...</p>
+            </div>
+          ) : error && viewSubjectId && viewClass ? (
+            <div className="alert alert-duo-danger">
+              <i className="bi bi-exclamation-triangle me-2"></i>
+              <strong>Error:</strong> {error}
+            </div>
+          ) : viewSubjectId && viewClass && viewAttendance && viewAttendance.length > 0 ? (
+            <div className="card card-duo">
+              <div className="card-header bg-white">
+                <h5 className="mb-0">
+                  <i className="bi bi-people-fill me-2"></i>
+                  Student Attendance - {viewClass}
+                </h5>
+              </div>
+              <div className="card-body">
+                <div className="d-flex flex-column gap-3">
+                  {(() => {
+                    const studentStats = getAttendanceByStudent();
+                    const studentsInClass = allStudents.filter(s => s.class_name === viewClass);
+                    
+                    return studentsInClass.map((student) => {
+                      const stats = studentStats[student.id];
+                      const attendancePercentage = stats ? stats.attendancePercentage : "0.0";
+                      
+                      return (
+                        <div key={student.id} className="card border" style={{borderRadius: "12px"}}>
+                          <div className="card-body">
+                            <div className="d-flex justify-content-between align-items-center">
+                              <div className="d-flex align-items-center gap-3">
+                                <div>
+                                  <h6 className="mb-1 fw-bold" style={{fontSize: "1rem"}}>
+                                    {student.name}
+                                  </h6>
+                                  <p className="text-muted mb-0 small">
+                                    Roll No: {student.roll_no}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="d-flex align-items-center gap-3">
+                                <div className="text-center">
+                                  <span
+                                    className={`badge ${
+                                      parseFloat(attendancePercentage) >= 75
+                                        ? "bg-success"
+                                        : parseFloat(attendancePercentage) >= 50
+                                        ? "bg-warning text-dark"
+                                        : "bg-danger"
+                                    }`}
+                                    style={{ fontSize: "1.25rem", padding: "0.5rem 0.75rem", fontWeight: "bold" }}
+                                  >
+                                    {attendancePercentage}%
+                                  </span>
+                                </div>
+                                {stats && (
+                                  <div className="d-flex gap-2">
+                                    <small className="text-muted">
+                                      <span className="badge bg-success">{stats.presentCount}</span> P
+                                    </small>
+                                    <small className="text-muted">
+                                      <span className="badge bg-danger">{stats.absentCount}</span> A
+                                    </small>
+                                    <small className="text-muted">
+                                      <span className="badge bg-secondary">{stats.totalLectures}</span> T
+                                    </small>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    });
+                  })()}
+                </div>
+              </div>
+            </div>
+          ) : viewSubjectId && viewClass ? (
+            <div className="alert alert-info text-center">
+              <i className="bi bi-info-circle me-2"></i>
+              No attendance records found for the selected subject and class.
             </div>
           ) : null}
         </div>

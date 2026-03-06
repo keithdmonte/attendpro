@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     host: '127.0.0.1',
     port: 5173,
-    strictPort: false, // If port is in use, try next available
+    strictPort: false, // If port in use, try next available
   },
   build: {
     outDir: 'dist',

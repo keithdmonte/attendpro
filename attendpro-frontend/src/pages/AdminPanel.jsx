@@ -394,7 +394,21 @@ function AdminPanel() {
       setTeacherForm({ name: "", email: "", department: "" });
       alert("✅ Teacher created successfully!");
     } catch (error) {
-      alert("❌ Error creating teacher: " + (error.response?.data?.detail || error.message));
+      const msg = error.response?.data?.detail || error.message;
+      const hint = msg.includes("already exists")
+        ? " Try clicking 'Refresh' to see existing teachers, or use a different email."
+        : "";
+      alert("❌ Error creating teacher: " + msg + hint);
+    }
+  };
+
+  // ✅ Refresh Teachers list
+  const handleRefreshTeachers = async () => {
+    try {
+      const updated = await teacherService.getTeachers();
+      setTeachers(updated || []);
+    } catch (err) {
+      alert("❌ Failed to load teachers: " + (err.response?.data?.detail || err.message));
     }
   };
 
@@ -1007,14 +1021,23 @@ function AdminPanel() {
 
           {/* Teachers Management */}
           <div className="card card-duo mb-4">
-            <div className="card-header-duo-blue d-flex justify-content-between align-items-center">
+            <div className="card-header-duo-blue d-flex justify-content-between align-items-center flex-wrap gap-2">
               <h5 className="mb-0">👨‍🏫 Teachers Management</h5>
-              <button
-                className="btn btn-sm btn-primary"
-                onClick={() => setShowTeacherForm(!showTeacherForm)}
-              >
-                {showTeacherForm ? "❌ Cancel" : "+ Add Teacher"}
-              </button>
+              <div className="d-flex gap-2">
+                <button
+                  className="btn btn-sm btn-outline-light"
+                  onClick={handleRefreshTeachers}
+                  title="Reload teachers list"
+                >
+                  🔄 Refresh
+                </button>
+                <button
+                  className="btn btn-sm btn-primary"
+                  onClick={() => setShowTeacherForm(!showTeacherForm)}
+                >
+                  {showTeacherForm ? "❌ Cancel" : "+ Add Teacher"}
+                </button>
+              </div>
             </div>
             {showTeacherForm && (
               <div className="card-body border-bottom">

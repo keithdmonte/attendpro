@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from typing import Generator
 
-DATABASE_URL = settings.database_url
+DATABASE_URL = settings.normalized_database_url
 
 if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL is not set. Please export it or load it via your settings.")

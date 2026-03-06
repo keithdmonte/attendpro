@@ -137,23 +137,11 @@ cd /path/to/attendpro/attendpro-frontend && npm run dev
 
 Your frontend will be live at `https://your-project.vercel.app`
 
-### Backend (Railway / Render)
+### Backend (Render)
 
-The FastAPI backend needs separate hosting. Recommended options:
+See **[RENDER_DEPLOYMENT.md](./RENDER_DEPLOYMENT.md)** for full instructions.
 
-**Railway** (railway.app):
-- Connect repo, set root to project root
-- Add PostgreSQL from Railway's marketplace
-- Set `DATABASE_URL` from the PostgreSQL service
-- Start command: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
-
-**Render** (render.com):
-- New Web Service, connect repo
-- Add PostgreSQL database, link to service
-- Build: `pip install -r backend/requirements.txt && cd backend && alembic upgrade head`
-- Start: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
-
-After deploying the backend, add its URL to `VITE_API_URL` in your Vercel project settings and redeploy.
+**Quick start:** Push to GitHub → [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint** → Select `attendpro` repo → Apply. Render will create the database and API from `render.yaml`.
 
 ### GitHub Pages
 

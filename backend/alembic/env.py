@@ -51,6 +51,9 @@ config = context.config
 # Allow overriding sqlalchemy.url via env
 db_url = os.getenv("DATABASE_URL")
 if db_url:
+    # Render uses postgres://; SQLAlchemy prefers postgresql://
+    if db_url.startswith("postgres://"):
+        db_url = "postgresql://" + db_url[11:]
     safe_url = db_url.replace("%", "%%")  # escape % for configparser
     config.set_main_option("sqlalchemy.url", safe_url)
 

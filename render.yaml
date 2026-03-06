@@ -1,0 +1,22 @@
+# AttendPro Backend - Render Blueprint
+# Deploy: Connect this repo to Render and use this blueprint
+
+databases:
+  - name: attendpro-db
+    databaseName: attendpro
+    plan: free
+
+services:
+  - type: web
+    name: attendpro-api
+    runtime: python
+    plan: free
+
+    buildCommand: pip install -r backend/requirements.txt && cd backend && alembic upgrade head
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: attendpro-db
+          property: connectionString

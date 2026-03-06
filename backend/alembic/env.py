@@ -17,6 +17,9 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..
 # Backend dir: .../attendpro/backend
 BACKEND_DIR = os.path.join(PROJECT_ROOT, "backend")
 
+# Ensure project root is in path (for backend.app.* imports in db/session.py)
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 # Ensure backend dir is importable so we can do 'from db...' and 'from models...'
 if BACKEND_DIR not in sys.path:
     sys.path.insert(0, BACKEND_DIR)

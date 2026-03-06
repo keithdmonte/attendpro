@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from typing import List, Optional, Tuple
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy import select, and_, func
@@ -22,6 +23,7 @@ def create_teacher(payload: TeacherCreate, db: Session = Depends(get_db)):
         name=payload.name,
         email=payload.email,
         department=payload.department,
+        created_at=datetime.now(timezone.utc),
     )
     db.add(obj)
     try:
@@ -30,10 +32,15 @@ def create_teacher(payload: TeacherCreate, db: Session = Depends(get_db)):
         return obj
     except IntegrityError as e:
         db.rollback()
-        # Likely unique-constraint on email
+        err_msg = str(getattr(e, "orig", e))
+        # Check if it's a unique constraint violation (duplicate email)
+        if "unique" in err_msg.lower() or "duplicate" in err_msg.lower() or "already exists" in err_msg.lower():
+            detail = "A teacher with this email already exists."
+        else:
+            detail = f"Database error: {err_msg}"
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="A teacher with this email already exists."
+            detail=detail
         ) from e
 
 

@@ -8,7 +8,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: process.env.NODE_ENV === 'production' 
-    ? (process.env.VITE_BASE_PATH || '/attendpro/') 
+    ? (process.env.VITE_BASE_PATH || '/')  // '/' for Vercel; use '/attendpro/' for GitHub Pages
     : '/',
   server: {
     host: '127.0.0.1',

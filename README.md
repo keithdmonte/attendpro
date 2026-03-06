@@ -121,20 +121,47 @@ cd /path/to/attendpro/attendpro-frontend && npm run dev
 
 ## 🌐 Deployment
 
+### Vercel (Frontend)
+
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com) and sign in with GitHub
+3. Click **Add New** → **Project** and import your `attendpro` repo
+4. Configure the project:
+   - **Root Directory:** `attendpro-frontend`
+   - **Framework Preset:** Vite (auto-detected)
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+5. Add environment variables:
+   - `VITE_API_URL` = your backend API URL (e.g. `https://your-backend.onrender.com`)
+6. Click **Deploy**
+
+Your frontend will be live at `https://your-project.vercel.app`
+
+### Backend (Railway / Render)
+
+The FastAPI backend needs separate hosting. Recommended options:
+
+**Railway** (railway.app):
+- Connect repo, set root to project root
+- Add PostgreSQL from Railway's marketplace
+- Set `DATABASE_URL` from the PostgreSQL service
+- Start command: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
+
+**Render** (render.com):
+- New Web Service, connect repo
+- Add PostgreSQL database, link to service
+- Build: `pip install -r backend/requirements.txt && cd backend && alembic upgrade head`
+- Start: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
+
+After deploying the backend, add its URL to `VITE_API_URL` in your Vercel project settings and redeploy.
+
 ### GitHub Pages
 
-The frontend is configured for GitHub Pages deployment:
-
-1. Push code to GitHub
-2. Go to repository Settings > Pages
-3. Select source: "GitHub Actions"
-4. The workflow will automatically deploy on push to `main` branch
-
-**Note**: Update `VITE_API_URL` environment variable in GitHub Actions secrets if your backend is hosted elsewhere.
+For GitHub Pages deployment, set `VITE_BASE_PATH=/attendpro/` in your build environment.
 
 ### Environment Variables
 
-Create `.env` file in `attendpro-frontend/`:
+Create `.env` file in `attendpro-frontend/` for local development:
 
 ```env
 VITE_API_URL=https://your-backend-api-url.com

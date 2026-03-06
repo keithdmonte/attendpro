@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 from typing import List, Optional, Tuple
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy import select, and_, func
@@ -23,7 +22,6 @@ def create_teacher(payload: TeacherCreate, db: Session = Depends(get_db)):
         name=payload.name,
         email=payload.email,
         department=payload.department,
-        created_at=datetime.now(timezone.utc),
     )
     db.add(obj)
     try:
